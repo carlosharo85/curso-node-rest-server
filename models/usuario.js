@@ -36,8 +36,12 @@ const UsuarioSchema = Schema({
 
 // tiene que ser funcion normal y no de flecha
 UsuarioSchema.methods.toJSON = function() {
-    const { __v, password, ...resto } = this.toObject();
-    return resto;
+    const { _id, __v, password, ...resto } = this.toObject();
+    
+    return {
+        uid: _id,
+        ...resto
+    };
 }
 
 
