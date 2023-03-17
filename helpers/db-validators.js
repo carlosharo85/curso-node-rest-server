@@ -1,5 +1,9 @@
-const Rol = require('../models/rol');
-const Usuario = require('../models/usuario');
+const {
+    Rol,
+    Usuario,
+    Categoria,
+    Producto
+ } = require('../models/index');
 
 
 // Validaciones de Roles
@@ -21,7 +25,6 @@ const usuarioExistsId = async(id = '') => {
     }
 }
 
-
 const usuarioExistsEmail = async(email = '') => {
     const existe = await Usuario.findOne({ email });
 
@@ -31,9 +34,60 @@ const usuarioExistsEmail = async(email = '') => {
 }
 
 
+// Validaciones de Categoria
+const categoriaExistsId = async(id = '') => {
+    const existe = await Categoria.findById(id);
+
+    if (!existe) {
+        throw new Error(`El ID ${id} no está registrado`);
+    }
+}
+
+const categoriaExistsNombre = async(nombre = '') => {
+    const existe = await Categoria.findOne({ nombre: nombre.toLocaleUpperCase() });
+
+    if (existe) {
+        throw new Error(`El nombre ${nombre} ya está registrado`);
+    }
+}
+
+const categoriaIsActive = async(id = '') => {
+    const categoria = await Categoria.findById(id);
+
+    if (!categoria.status) {
+        throw new Error(`La categoria no está disponible`);
+    }
+}
+
+
+// Validaciones de Producto
+const productoExistsId = async(id = '') => {
+    const existe = await Producto.findById(id);
+
+    if (!existe) {
+        throw new Error(`El ID ${id} no está registrado`);
+    }
+}
+
+const productoExistsNombre = async(nombre = '') => {
+    const existe = await Producto.findOne({ nombre: nombre.toLocaleUpperCase() });
+
+    if (existe) {
+        throw new Error(`El nombre ${nombre} ya está registrado`);
+    }
+}
+
+
 module.exports = {
     rolValidarNombre,
     
     usuarioExistsId,
-    usuarioExistsEmail
+    usuarioExistsEmail,
+
+    categoriaExistsId,
+    categoriaExistsNombre,
+    categoriaIsActive,
+
+    productoExistsId,
+    productoExistsNombre
 }

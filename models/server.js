@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { dbConnection } = require('../database/config');
 
+
 class Server {
 
     constructor() {
@@ -10,8 +11,13 @@ class Server {
         this.PORT = process.env.PORT;
 
         // paths
-        this.userPath = '/api/usuario';
-        this.authPath = '/api/auth';
+        this.paths = {
+            auth: '/api/auth',
+            usuario: '/api/usuario',
+            categoria: '/api/categoria',
+            producto: '/api/producto',
+            buscar: '/api/buscar'
+        }
 
         // Conectar a la base de datos
         this.conectarDB();
@@ -39,8 +45,11 @@ class Server {
     }
 
     routes() {
-        this.app.use(this.authPath, require('../routes/auth'));
-        this.app.use(this.userPath, require('../routes/usuario'));
+        this.app.use(this.paths.auth, require('../routes/auth'));
+        this.app.use(this.paths.usuario, require('../routes/usuario'));
+        this.app.use(this.paths.categoria, require('../routes/categoria'));
+        this.app.use(this.paths.producto, require('../routes/producto'));
+        this.app.use(this.paths.buscar, require('../routes/buscar'));
     }
 
     listen() {
@@ -48,7 +57,7 @@ class Server {
             console.log(`Escuchando en el puerto: ${this.PORT}`);
         });
     }
-
 }
+
 
 module.exports = Server;
